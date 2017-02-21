@@ -11,36 +11,6 @@ def installOpener():
     urllib.request.install_opener(opener)
 
 
-def base64encode(s):
-    base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-    out = ''
-    i = 0
-    l = len(s)
-    while(i < l):
-        i += 1
-        c1 = ord(s[i - 1]) & 0xff
-        if i == l:
-            out += base64EncodeChars[c1 >> 2]
-            out += base64EncodeChars[(c1 & 0x3) << 4]
-            out += "=="
-            break
-        i += 1
-        c2 = ord(s[i - 1])
-        if i == l:
-            out += base64EncodeChars[c1 >> 2]
-            out += base64EncodeChars[((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4)]
-            out += base64EncodeChars[(c2 & 0xF) << 2]
-            out += "="
-            break
-        i += 1
-        c3 = ord(s[i - 1])
-        out += base64EncodeChars[c1 >> 2]
-        out += base64EncodeChars[((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4)]
-        out += base64EncodeChars[((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6)]
-        out += base64EncodeChars[c3 & 0x3F]
-    return '{B}' + out
-
-
 def loginWeb():
     with open('./configure.json', 'r') as f:
         usrInfo = json.load(f)
@@ -49,8 +19,8 @@ def loginWeb():
 
     values = {
         'action': 'login',
-        'username': str(usrInfo['username']),
-        'password': base64encode(usrInfo['password']),
+        'username': str(usrInfo['username']) + '@uestc',
+        'password': usrInfo['password'],
         'ac_id': '1',
         'user_ip': '',
         'nas_ip': '',
